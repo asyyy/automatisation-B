@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 import datetime
 import random
 import xlsxwriter
@@ -5,19 +6,7 @@ import xlsxwriter
 
 begin_time = datetime.datetime.now()
 
-countMin = 1
-countMax = 50
-prefix = "Af"
-name = "Bn"
-year = "Y21"
-season = "Au"
-tab1 = ["PA","PB","PC","PD"]
-tab1bis = ["PA","PB","PC","PD","Culturomique"]
-tab2 = ["BS","RH","LF","RO"]
-length_box= 10
-width_box= 7
-length_randombox= 10
-width_randombox= 7
+# Variable init
 sacs = []
 tubes = []
 tubes_PA_PB = []
@@ -88,13 +77,15 @@ def random_box(title, length, width, global_col, list):
     yellow_cell.set_bg_color('yellow')
     dead_columns = ["Truc : "]
     for row in range(length):
-        worksheet.write(row+1,width+global_col, dead_columns[0]+str(x),yellow_cell)
+        worksheet.write(row+1,width+global_col, dead_columns[0]+str(row),yellow_cell)
 # Prefixe generator  = AfXXX
 def prefix_count(prefix,index):
     if index < 10 :
         return prefix + "00" + str(index)
-    if 10 <= index < 99:
+    if 10 <= index < 100:
         return prefix + "0"  + str(index)
+    if 100 <= index < 1000:
+        return prefix + str(index)
 
 # List generator (TODO A mettre dans une fonction)
 def list_generator():
@@ -124,10 +115,61 @@ def list_generator():
 workbook = xlsxwriter.Workbook('projetB.xlsx')
 worksheet = workbook.add_worksheet()
 
+
 title_cell = workbook.add_format()
 title_cell.set_bg_color('green')
 title_cell.set_font_size(18)
 title_cell.set_align('center')
+
+
+def non_negative_input(output):
+    while True:
+        try:
+            value = int(input(output))
+        except ValueError:
+            print("Sorry, I didn't understand that.")
+            continue
+
+        if value < 0:
+            print("Sorry, your response must not be negative.")
+        else:
+            break
+    return value
+
+def non_empty_string_input(output):
+    while True:
+        try:
+            value = str(input(output))
+        except ValueError:
+            print("Ce n'est pas une chaîne de caractère.")
+            continue
+
+        if not value:
+            print("Votre réponse ne doit pas être vide.")
+        elif value.isdigit():
+            print("Votre réponse ne doit pas être une nombre.")
+        else:
+            break
+    return value
+
+#prefix = digit_input("Prefix: ")
+## use check_is_digit()
+print("Pour quitter l'opération en cours, faite CTRL+C.")
+prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+
+tab1 = ["PA","PB","PC","PD"]
+tab1bis = ["PA","PB","PC","PD","Culturomique"]
+tab2 = ["BS","RH","LF","RO"]
+length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
+width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
+length_randombox= length_box
+width_randombox= width_box
+
 # Créer les listes
 list_generator()
 
@@ -160,5 +202,5 @@ random_box("PC_PD",length_randombox,width_randombox, 7 + width_box+width_randomb
 workbook.close()
 
 print(datetime.datetime.now() - begin_time)
-print("hour:minute:second.microsecond")
+print("minute:second:microsecond")
 print("Nombre de tube = " + str(len(tubes)))

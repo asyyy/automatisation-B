@@ -89,30 +89,36 @@ def random_box(title, length, width, global_col, list):
     dead_columns = ["Truc : "]
     for row in range(length):
         worksheet.write(row+1,width+global_col, dead_columns[0]+str(x),yellow_cell)
+# Prefixe generator  = AfXXX
+def prefix_count(prefix,index):
+    if index < 10 :
+        return prefix + "00" + str(index)
+    if 10 <= index < 99:
+        return prefix + "0"  + str(index)
 
 # List generator (TODO A mettre dans une fonction)
-for x in range(countMin,countMax+1):
-   
-    if x < 10 :
-        line = prefix + "00" + str(x)
-    if 10 <= x < 99:
-        line = prefix + "0"  + str(x)
+def list_generator():
+    for x in range(countMin,countMax+1):
     
-    line = line+'-'+name+'-'+year+'-'+season
-  
-    sacs_zip.append(line)
+        line = prefix_count(prefix,x)
 
-    for y in tab1bis:
-        sacs.append(line +'-' + y)
+        line = line+'-'+name+'-'+year+'-'+season
+    
+        sacs_zip.append(line)
 
-    for y in tab1:
-        pilluliers.append(line + '-' + y)
-        for z in tab2: 
-            tubes.append(line + '-' + y + '-' + z)
-            if y == "PA" or y == "PB":
-                tubes_PA_PB.append(line + '-' + y + '-' + z)
-            if y == "PC" or y == "PD":
-                tubes_PC_PD.append(line + '-' + y + '-' + z)
+        for y in tab1bis:
+            sacs.append(line +'-' + y)
+
+        for y in tab1:
+            pilluliers.append(line + '-' + y)
+            for z in tab2: 
+                tubes.append(line + '-' + y + '-' + z)
+                if y == "PA" or y == "PB":
+                    tubes_PA_PB.append(line + '-' + y + '-' + z)
+                # if y == "PC" or y == "PD":
+                else:
+                    tubes_PC_PD.append(line + '-' + y + '-' + z)
+
 
 # Main
 workbook = xlsxwriter.Workbook('projetB.xlsx')
@@ -122,6 +128,8 @@ title_cell = workbook.add_format()
 title_cell.set_bg_color('green')
 title_cell.set_font_size(18)
 title_cell.set_align('center')
+# Créer les listes
+list_generator()
 
 # Sacs column
 write_list_in_excel(0,"Sacs",sacs)

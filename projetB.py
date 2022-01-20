@@ -67,10 +67,16 @@ def random_box(title, length, width, global_col, list):
     for i in range(length):
         for j in range(width):
             random_box_coordinate.append([i,j])
-   
-   
-    for x in range(len(list)):
-        
+    # print(random_box_coordinate)
+    # print("len random: " + str(len(random_box_coordinate)))
+    # print("len list: " + str(len(list)))
+    
+    if len(list) < len(random_box_coordinate):
+        max = len(list)
+    else: 
+        max = len(random_box_coordinate)
+
+    for x in range(max):
         coor = random_coor(random_box_coordinate)
         worksheet.write(coor[0]+1, coor[1]+global_col, list[x])
 
@@ -155,30 +161,30 @@ def non_empty_string_input(output):
             break
     return value
 
-#prefix = digit_input("Prefix: ")
-## use check_is_digit()
-print("Pour quitter l'opération en cours, faite CTRL+C.")
-# prefix = non_empty_string_input("Veuillez entrer le prefix : ")
-# countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
-# countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
-# name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
-# year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
-# season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
 
-prefix = "Af"
-countMin = 0
-countMax = 10
-name = "Bn"
-year = "Y22"
-season = "Sp"
-length_box= 10
-width_box= 10
+print("Pour quitter l'opération en cours, faite CTRL+C.")
+prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
+width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
+
+# prefix = "Af"
+# countMin = 0
+# countMax = 100
+# name = "Bn"
+# year = "Y22"
+# season = "Sp"
+# length_box= 11
+# width_box= 11
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique"]
 tab2 = ["BS","RH","LF","RO"]
-# length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
-# width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
+
 length_randombox= length_box
 width_randombox= width_box
 
@@ -212,6 +218,6 @@ random_box("PC_PD",length_randombox,width_randombox, 7 + width_box+width_randomb
 
 workbook.close()
 
-# print(datetime.datetime.now() - begin_time)
-# print("minute:second:microsecond")
-# print("Nombre de tube = " + str(len(tubes)))
+print(datetime.datetime.now() - begin_time)
+print("minute:second:microsecond")
+print("Nombre de tube = " + str(len(tubes)))

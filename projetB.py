@@ -64,11 +64,12 @@ def random_box(title, length, width, global_col, list):
     worksheet.write(0,global_col,"Box Random "+title, title_cell)
     random_box_coordinate = []
 
-    for i in range(0,length):
-        for j in range(0,width):
+    for i in range(length):
+        for j in range(width):
             random_box_coordinate.append([i,j])
    
-    for x in range(len(random_box_coordinate)):
+   
+    for x in range(len(list)):
         
         coor = random_coor(random_box_coordinate)
         worksheet.write(coor[0]+1, coor[1]+global_col, list[x])
@@ -86,6 +87,8 @@ def prefix_count(prefix,index):
         return prefix + "0"  + str(index)
     if 100 <= index < 1000:
         return prefix + str(index)
+    if index <= 1000:
+        return "Count > 1000 is not implement."
 
 # List generator (TODO A mettre dans une fonction)
 def list_generator():
@@ -130,8 +133,8 @@ def non_negative_input(output):
             print("Sorry, I didn't understand that.")
             continue
 
-        if value < 0:
-            print("Sorry, your response must not be negative.")
+        if value < 0 or value >= 1000:
+            print("Sorry, your response must not be negative and under 1000")
         else:
             break
     return value
@@ -155,18 +158,27 @@ def non_empty_string_input(output):
 #prefix = digit_input("Prefix: ")
 ## use check_is_digit()
 print("Pour quitter l'opération en cours, faite CTRL+C.")
-prefix = non_empty_string_input("Veuillez entrer le prefix : ")
-countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
-countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
-name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
-year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
-season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+# prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+# countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+# countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+# name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+# year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+# season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+
+prefix = "Af"
+countMin = 0
+countMax = 10
+name = "Bn"
+year = "Y22"
+season = "Sp"
+length_box= 10
+width_box= 10
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique"]
 tab2 = ["BS","RH","LF","RO"]
-length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
-width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
+# length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
+# width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
 length_randombox= length_box
 width_randombox= width_box
 
@@ -190,7 +202,6 @@ write_list_in_excel(3,"Tubes", tubes)
 boxs(length_box,width_box, 5, tubes)
 
 # Random Box PA PB
-
 random_box("PA_PB",length_randombox,width_randombox, 7 + width_box, tubes_PA_PB)
 
 # Random Box PC PD
@@ -201,6 +212,6 @@ random_box("PC_PD",length_randombox,width_randombox, 7 + width_box+width_randomb
 
 workbook.close()
 
-print(datetime.datetime.now() - begin_time)
-print("minute:second:microsecond")
-print("Nombre de tube = " + str(len(tubes)))
+# print(datetime.datetime.now() - begin_time)
+# print("minute:second:microsecond")
+# print("Nombre de tube = " + str(len(tubes)))

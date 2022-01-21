@@ -169,8 +169,10 @@ countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
 name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
 year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
 season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
-length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
-width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
+length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
+width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
+length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
+width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
 
 # prefix = "TestM"
 # countMin = 0
@@ -180,13 +182,14 @@ width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
 # season = "Sp"
 # length_box= 10
 # width_box= 10
+# length_randombox= 8
+# width_randombox= 12
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique"]
 tab2 = ["BS","RH","LF","RO"]
 
-length_randombox= length_box
-width_randombox= width_box
+
 
 # Créer les listes
 list_generator()

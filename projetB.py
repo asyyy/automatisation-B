@@ -49,7 +49,7 @@ def boxs(length,width,global_col,list):
     box_number = 0
     global_row = 1
     while index < len(list):
-        index = box(length,width,global_col,global_row,list,index,box_number)
+        index = box(length,width,global_col,global_row+box_number,list,index,box_number)
         global_row = global_row + length
         box_number = box_number + 1
 
@@ -172,14 +172,14 @@ season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
 length_box= non_negative_input("Veuillez entrer la longueur de votre boite : ")
 width_box= non_negative_input("Veuillez entrer la largeur de votre boite : ")
 
-# prefix = "Af"
+# prefix = "TestM"
 # countMin = 0
-# countMax = 100
+# countMax = 25
 # name = "Bn"
 # year = "Y22"
 # season = "Sp"
-# length_box= 11
-# width_box= 11
+# length_box= 10
+# width_box= 10
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique"]

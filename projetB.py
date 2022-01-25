@@ -97,9 +97,11 @@ def random_box2(title, length, width, global_col, global_row, list, index, box_n
     yellow_cell = workbook.add_format()
     yellow_cell.set_bg_color('yellow')
     dead_columns = ["Truc : "]
+    for row in range(length):
+        worksheet.write(global_row+row,width+global_col, dead_columns[0]+str(row),yellow_cell)
+
     return index
-    # for row in range(length):
-    #     worksheet.write(row+1,width+global_col, dead_columns[0]+str(row),yellow_cell)
+    
 
 # Will use box function until there are enought element in the list
 # Param => length : length of the box
@@ -301,7 +303,7 @@ length_randombox= 5
 width_randombox= 5
 
 tab1 = ["PA","PB","PC","PD"]
-tab1bis = ["PA","PB","PC","PD","Culturomique"]
+tab1bis = ["PA","PB","PC","PD","Culturomique","Culturomique"]
 tab2 = ["BS","RH","LF","RO"]
 
 

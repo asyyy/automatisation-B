@@ -15,6 +15,11 @@ pilluliers = []
 sacs_zip = []
 col_start = 0
 row_start = 1
+boite_BS = []
+boite_RO = []
+boite_RH = []
+boite_LF = []
+
 
 # FUNCTIONS (TODO les commenter parce que la c'est chaud)
 
@@ -44,12 +49,12 @@ def box(length,width,global_col,global_row,list,index,box_number):
                 index = index+1
     return index
 
-def boxs(length,width,global_col,list):
+def boxs(length,width,global_col,list, title):
     index = 0
     box_number = 0
     global_row = 1
     while index < len(list):
-        index = box(length,width,global_col,global_row+box_number,list,index,box_number)
+        index = box(length,width,global_col,global_row+box_number,list,index,str(box_number)+ " " +title)
         global_row = global_row + length
         box_number = box_number + 1
 
@@ -113,11 +118,22 @@ def list_generator():
             pilluliers.append(line + '-' + y)
             for z in tab2: 
                 tubes.append(line + '-' + y + '-' + z)
+                if z == "BS":
+                    boite_BS.append(line + '-' + y + '-' + z)
+                if z == "RH":
+                    boite_RH.append(line + '-' + y + '-' + z)
+                if z == "LF":
+                    boite_LF.append(line + '-' + y + '-' + z)
+                if z == "RO":
+                    boite_RO.append(line + '-' + y + '-' + z)
+
                 if y == "PA" or y == "PB":
                     tubes_PA_PB.append(line + '-' + y + '-' + z)
                 # if y == "PC" or y == "PD":
                 else:
                     tubes_PC_PD.append(line + '-' + y + '-' + z)
+                
+
 
 
 # Main
@@ -163,27 +179,27 @@ def non_empty_string_input(output):
 
 
 print("Pour quitter l'opération en cours, faite CTRL+C.")
-prefix = non_empty_string_input("Veuillez entrer le prefix : ")
-countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
-countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
-name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
-year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
-season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
-length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
-width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
-length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
-width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
+# prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+# countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+# countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+# name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+# year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+# season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+# length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
+# width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
+# length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
+# width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
 
-# prefix = "TestM"
-# countMin = 0
-# countMax = 25
-# name = "Bn"
-# year = "Y22"
-# season = "Sp"
-# length_box= 10
-# width_box= 10
-# length_randombox= 8
-# width_randombox= 12
+prefix = "TestM"
+countMin = 0
+countMax = 25
+name = "Bn"
+year = "Y22"
+season = "Sp"
+length_box= 10
+width_box= 10
+length_randombox= 8
+width_randombox= 12
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique"]
@@ -194,7 +210,7 @@ tab2 = ["BS","RH","LF","RO"]
 # Créer les listes
 list_generator()
 
-# Sacs column
+#Sacs column
 write_list_in_excel(0,"Sacs",sacs)
 
 # Sacs Zip column
@@ -207,15 +223,21 @@ write_list_in_excel(2,"Pilluliers",pilluliers)
 write_list_in_excel(3,"Tubes", tubes)
 
 
-# Box 
-boxs(length_box,width_box, 5, tubes)
+# # Box 
+boxs(length_box,width_box, 5, tubes, "")
+
+boxs(length_box,width_box, 7+width_box, boite_RO, "RO")
+boxs(length_box,width_box, 9+width_box*2, boite_BS, "BS")
+boxs(length_box,width_box, 11+width_box*3, boite_LF, "LF")
+boxs(length_box,width_box, 13+width_box*4, boite_RH, "RH")
+
 
 # Random Box PA PB
-random_box("PA_PB",length_randombox,width_randombox, 7 + width_box, tubes_PA_PB)
+random_box("PA_PB",length_randombox,width_randombox, 15 + width_box*5, tubes_PA_PB)
 
 # Random Box PC PD
 
-random_box("PC_PD",length_randombox,width_randombox, 7 + width_box+width_randombox+2, tubes_PC_PD)
+random_box("PC_PD",length_randombox,width_randombox, 17 + width_box*6+width_randombox, tubes_PC_PD)
 
 #Random Box
 

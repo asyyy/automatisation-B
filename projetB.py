@@ -61,7 +61,7 @@ def write_list_in_excel(col,title,list):
 def box(length,width,global_col,global_row,list,index,box_number):
     worksheet.set_column(global_col, global_col+width-1, find_longest_word(list))
     worksheet.merge_range(global_row-1,global_col,global_row-1, global_col+width-1, 'Merged Range')
-    worksheet.write(global_row-1,global_col,"Box " +str(box_number),title_cell)
+    worksheet.write(global_row-1,global_col,"Back up " +str(box_number),title_cell)
     
 
     for row in range(0,length):
@@ -82,7 +82,7 @@ def box(length,width,global_col,global_row,list,index,box_number):
 def random_box2(title, length, width, global_col, global_row, list, index, box_number):
     worksheet.set_column(global_col, global_col+width-1, find_longest_word(list))
     worksheet.merge_range(global_row-1,global_col,global_row-1, global_col+width-1, 'Merged Range')
-    worksheet.write(global_row-1,global_col,"Box Random "+title + " " +str(box_number), title_cell)
+    worksheet.write(global_row-1,global_col,"Plaque "+title + " " +str(box_number), title_cell)
     
     tab_coor = tab_2D_coordinate(length,width)
     
@@ -150,58 +150,6 @@ def random_coor(list):
     if list:
         r = random.randint(0,len(list)-1)
         return list.pop(r)
-
-def random_box(title, length, width, global_col, list):
-    worksheet.set_column(global_col, global_col+width, find_longest_word(list))
-    worksheet.merge_range(0,global_col,0, global_col+width, 'Merged Range')
-    worksheet.write(0,global_col,"Box Random "+title, title_cell)
-    random_box_coordinate = []
-
-    for i in range(length):
-        for j in range(width):
-            random_box_coordinate.append([i,j])
-    
-    if len(list) < len(random_box_coordinate):
-        max = len(list)
-    else: 
-        max = len(random_box_coordinate)
-
-
-    yellow_cell = workbook.add_format()
-    yellow_cell.set_bg_color('yellow')
-    dead_columns = ["Truc : "]
-    for row in range(length):
-        worksheet.write(row+1,width+global_col, dead_columns[0]+str(row),yellow_cell)
-
-
-# Old method of random_box
-# def random_box(title, length, width, global_col, list):
-#     worksheet.set_column(global_col, global_col+width, find_longest_word(list))
-#     worksheet.merge_range(0,global_col,0, global_col+width, 'Merged Range')
-#     worksheet.write(0,global_col,"Box Random "+title, title_cell)
-#     random_box_coordinate = []
-
-#     for i in range(length):
-#         for j in range(width):
-#             random_box_coordinate.append([i,j])
-#     # print(random_box_coordinate)
-#     # print("len random: " + str(len(random_box_coordinate)))
-#     # print("len list: " + str(len(list)))
-    
-#     if len(list) < len(random_box_coordinate):
-#         longest_list = len(list)
-#     else: 
-#         longest_list = len(random_box_coordinate)
-
-#     for x in range(longest_list):
-#         coor = random_coor(random_box_coordinate)
-#         worksheet.write(coor[0]+1, coor[1]+global_col, list[x])
-
-#     yellow_cell = workbook.add_format()
-#     yellow_cell.set_bg_color('yellow')
-#     dead_columns = ["Truc : "]
-#     for row in range(length):
-#         worksheet.write(row+1,width+global_col, dead_columns[0]+str(row),yellow_cell)
         
 # Prefixe generator  = AfXXX
 # Param => prefix : string, the prefix to write
@@ -246,9 +194,25 @@ def list_generator():
 
                 if y == "PA" or y == "PB":
                     tubes_PA_PB.append(line + '-' + y + '-' + z)
+                    if z == "BS":
+                        random_PAB_BS.append(line + '-' + y + '-' + z)
+                    if z == "RH":
+                        random_PAB_RH.append(line + '-' + y + '-' + z)
+                    if z == "LF":
+                        random_PAB_LF.append(line + '-' + y + '-' + z)
+                    if z == "RO":
+                        random_PAB_RO.append(line + '-' + y + '-' + z)
                 # if y == "PC" or y == "PD":
                 else:
                     tubes_PC_PD.append(line + '-' + y + '-' + z)
+                    if z == "BS":
+                        random_PCD_BS.append(line + '-' + y + '-' + z)
+                    if z == "RH":
+                        random_PCD_RH.append(line + '-' + y + '-' + z)
+                    if z == "LF":
+                        random_PCD_LF.append(line + '-' + y + '-' + z)
+                    if z == "RO":
+                        random_PCD_RO.append(line + '-' + y + '-' + z)
                 
 
 
@@ -363,24 +327,23 @@ boxs(length_box,width_box, 13+width_box*4, boite_RH, "RH")
 
 
 # Random Box PA PB
-random_boxes("PA_PB",length_randombox,width_randombox, 15 + width_box*5, tubes_PA_PB)
+#random_boxes("PA_PB",length_randombox,width_randombox, 15 + width_box*5, tubes_PA_PB)
 
 # Random Box PC PD
 
-random_boxes("PC_PD",length_randombox,width_randombox, 17 + width_box*5+width_randombox, tubes_PC_PD)
+#random_boxes("PC_PD",length_randombox,width_randombox, 17 + width_box*5+width_randombox, tubes_PC_PD)
 
 #Random Box
-# Random Box
 
 print("Nombre de tube = " + str(len(random_PAB_BS)))
-random_boxes("PA_PB_BS",length_randombox,width_randombox, 19 + width_box*5+width_randombox*1, random_PAB_BS)
-random_boxes("PA_PB_RH",length_randombox,width_randombox, 21 + width_box*5+width_randombox*2, random_PAB_RH)
-random_boxes("PA_PB_LF",length_randombox,width_randombox, 23 + width_box*5+width_randombox*3, random_PAB_LF)
-random_boxes("PA_PB_RO",length_randombox,width_randombox, 25 + width_box*5+width_randombox*4, random_PAB_RO)
-random_boxes("PC_PD_BS",length_randombox,width_randombox, 27 + width_box*5+width_randombox*5, random_PCD_BS)
-random_boxes("PC_PD_RH",length_randombox,width_randombox, 29 + width_box*5+width_randombox*6, random_PCD_RH)
-random_boxes("PC_PD_LF",length_randombox,width_randombox, 31 + width_box*5+width_randombox*7, random_PCD_LF)
-random_boxes("PC_PD_RO",length_randombox,width_randombox, 33 + width_box*5+width_randombox*8, random_PCD_RO)
+random_boxes("PA_PB_BS",length_randombox,width_randombox, 15 + width_box*5+width_randombox*0, random_PAB_BS)
+random_boxes("PA_PB_RH",length_randombox,width_randombox, 17 + width_box*5+width_randombox*1, random_PAB_RH)
+random_boxes("PA_PB_LF",length_randombox,width_randombox, 19 + width_box*5+width_randombox*2, random_PAB_LF)
+random_boxes("PA_PB_RO",length_randombox,width_randombox, 21 + width_box*5+width_randombox*3, random_PAB_RO)
+random_boxes("PC_PD_BS",length_randombox,width_randombox, 23 + width_box*5+width_randombox*4, random_PCD_BS)
+random_boxes("PC_PD_RH",length_randombox,width_randombox, 25 + width_box*5+width_randombox*5, random_PCD_RH)
+random_boxes("PC_PD_LF",length_randombox,width_randombox, 27 + width_box*5+width_randombox*6, random_PCD_LF)
+random_boxes("PC_PD_RO",length_randombox,width_randombox, 29 + width_box*5+width_randombox*7, random_PCD_RO)
 
 workbook.close()
 

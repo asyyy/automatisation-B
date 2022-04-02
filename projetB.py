@@ -273,27 +273,27 @@ title_cell.set_align('center')
 
 
 print("Pour quitter l'opération en cours, faite CTRL+C.")
-# prefix = non_empty_string_input("Veuillez entrer le prefix : ")
-# countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
-# countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
-# name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
-# year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
-# season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
-# length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
-# width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
-# length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
-# width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
+prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
+width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
+length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
+width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
 
-prefix = "TestM"
-countMin = 0
-countMax = 25
-name = "Bn"
-year = "Y22"
-season = "Sp"
-length_box= 10
-width_box= 10
-length_randombox= 5
-width_randombox= 5
+# prefix = "TestM"
+# countMin = 0
+# countMax = 25
+# name = "Bn"
+# year = "Y22"
+# season = "Sp"
+# length_box= 10
+# width_box= 10
+# length_randombox= 5
+# width_randombox= 5
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique","Culturomique"]

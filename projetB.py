@@ -2,6 +2,7 @@ from curses.ascii import isdigit
 import datetime
 import random
 import xlsxwriter
+from xlsxwriter.utility import xl_rowcol_to_cell
 
 
 begin_time = datetime.datetime.now()
@@ -29,6 +30,16 @@ random_PCD_BS = []
 random_PCD_RH = []
 random_PCD_LF = []
 random_PCD_RO = []
+
+sample_coordinate_box = {}
+sample_coordinate_random = {}
+
+sample_coordinate_box.update({"Echantillons":"Coordonnée"})
+sample_coordinate_random.update({"Echantillons":"Coordonnée"})
+
+tab1 = ["PA","PB","PC","PD"]
+tab1bis = ["PA","PB","PC","PD","Culturomique","Culturomique"]
+tab2 = ["BS","RH","LF","RO"]
 
 # Find the longest word in a list
 # Param => list : List
@@ -79,7 +90,7 @@ def box(length,width,global_col,global_row,list,index,box_number):
 # Param => list : list to write
 # Param => index : index of the element in the list to start
 # Param => box_number : number of the box
-def random_box2(title, length, width, global_col, global_row, list, index, box_number):
+def random_box(title, length, width, global_col, global_row, list, index, box_number):
     worksheet.set_column(global_col, global_col+width-1, find_longest_word(list))
     worksheet.merge_range(global_row-1,global_col,global_row-1, global_col+width-1, 'Merged Range')
     worksheet.write(global_row-1,global_col,"Plaque "+title + " " +str(box_number), title_cell)
@@ -95,6 +106,12 @@ def random_box2(title, length, width, global_col, global_row, list, index, box_n
         if index >= len(list):
             break
         coor = random_coor(tab_coor)
+        # print("Coor 0 : " + str(coor[0]+global_row))
+        # print("Coor 1 : " + str(coor[1]+global_col))
+        # print("Sample : " + list[index] +  "chess coor : "+ xl_rowcol_to_cell(coor[0]+global_row,coor[1]+global_col))
+
+        # Add to dict the coordinate translate to chess coordinate
+        sample_coordinate_random.update({list[index]: xl_rowcol_to_cell(coor[0]+global_row,coor[1]+global_col)})
         worksheet.write(coor[0]+global_row, coor[1]+global_col, list[index])
         index=index+1
 
@@ -141,7 +158,7 @@ def random_boxes(title, length,width,global_col,list):
     global_row = 1
 
     while index < len(list):
-        index = random_box2(title, length,width,global_col, global_row+box_number,list,index,box_number)
+        index = random_box(title, length,width,global_col, global_row+box_number,list,index,box_number)
         global_row = global_row+length
         box_number = box_number + 1
         
@@ -272,58 +289,54 @@ title_cell.set_font_size(18)
 title_cell.set_align('center')
 
 
-print("Pour quitter l'opération en cours, faite CTRL+C.")
-prefix = non_empty_string_input("Veuillez entrer le prefix : ")
-countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
-countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
-name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
-year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
-season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
-length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
-width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
-length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
-width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
+# print("Pour quitter l'opération en cours, faite CTRL+C.")
+# prefix = non_empty_string_input("Veuillez entrer le prefix : ")
+# countMin = non_negative_input("Veuillez entrer la borne min (>0) : ") 
+# countMax = non_negative_input("Veuillez entrer la borne max (>0) : ")
+# name = non_empty_string_input("Veuillez entrer le nom de votre truc (ex: Bn): ")
+# year = non_empty_string_input("Veuillez entrer l'année (ex: Y21) : ")
+# season = non_empty_string_input("Veuillez entrer la saison (ex: Au) : ")
+# length_box= non_negative_input("Veuillez entrer la longueur de votre boite normal : ")
+# width_box= non_negative_input("Veuillez entrer la largeur de votre boite normal : ")
+# length_randombox= non_negative_input("Veuillez entrer la longueur de votre boite aléatoire : ")
+# width_randombox= non_negative_input("Veuillez entrer la largeur de votre boite aléatoire : ")
 
-# prefix = "TestM"
-# countMin = 0
-# countMax = 25
-# name = "Bn"
-# year = "Y22"
-# season = "Sp"
-# length_box= 10
-# width_box= 10
-# length_randombox= 5
-# width_randombox= 5
-
-tab1 = ["PA","PB","PC","PD"]
-tab1bis = ["PA","PB","PC","PD","Culturomique","Culturomique"]
-tab2 = ["BS","RH","LF","RO"]
+prefix = "TestM"
+countMin = 0
+countMax = 25
+name = "Bn"
+year = "Y22"
+season = "Sp"
+length_box= 6
+width_box= 6
+length_randombox= 5
+width_randombox= 5
 
 
 
 # Créer les listes
 list_generator()
 
-#Sacs column
-write_list_in_excel(0,"Sacs",sacs)
+# #Sacs column
+# write_list_in_excel(0,"Sacs",sacs)
 
-# Sacs Zip column
-write_list_in_excel(1,"Sacs ZIP",sacs_zip)
+# # Sacs Zip column
+# write_list_in_excel(1,"Sacs ZIP",sacs_zip)
 
-# Pilluliers
-write_list_in_excel(2,"Pilluliers",pilluliers)
+# # Pilluliers
+# write_list_in_excel(2,"Pilluliers",pilluliers)
 
-# Tubes 
-write_list_in_excel(3,"Tubes", tubes)
+# # Tubes 
+# write_list_in_excel(3,"Tubes", tubes)
 
 
 # # Box 
-boxs(length_box,width_box, 5, tubes, "")
+# boxs(length_box,width_box, 5, tubes, "")
 
-boxs(length_box,width_box, 7+width_box, boite_RO, "RO")
-boxs(length_box,width_box, 9+width_box*2, boite_BS, "BS")
-boxs(length_box,width_box, 11+width_box*3, boite_LF, "LF")
-boxs(length_box,width_box, 13+width_box*4, boite_RH, "RH")
+# boxs(length_box,width_box, 7+width_box, boite_RO, "RO")
+# boxs(length_box,width_box, 9+width_box*2, boite_BS, "BS")
+# boxs(length_box,width_box, 11+width_box*3, boite_LF, "LF")
+# boxs(length_box,width_box, 13+width_box*4, boite_RH, "RH")
 
 
 # Random Box PA PB
@@ -335,15 +348,17 @@ boxs(length_box,width_box, 13+width_box*4, boite_RH, "RH")
 
 #Random Box
 
-print("Nombre de tube = " + str(len(random_PAB_BS)))
+# print("Nombre de tube = " + str(len(random_PAB_BS)))
 random_boxes("PA_PB_BS",length_randombox,width_randombox, 15 + width_box*5+width_randombox*0, random_PAB_BS)
-random_boxes("PA_PB_RH",length_randombox,width_randombox, 17 + width_box*5+width_randombox*1, random_PAB_RH)
-random_boxes("PA_PB_LF",length_randombox,width_randombox, 19 + width_box*5+width_randombox*2, random_PAB_LF)
-random_boxes("PA_PB_RO",length_randombox,width_randombox, 21 + width_box*5+width_randombox*3, random_PAB_RO)
-random_boxes("PC_PD_BS",length_randombox,width_randombox, 23 + width_box*5+width_randombox*4, random_PCD_BS)
-random_boxes("PC_PD_RH",length_randombox,width_randombox, 25 + width_box*5+width_randombox*5, random_PCD_RH)
-random_boxes("PC_PD_LF",length_randombox,width_randombox, 27 + width_box*5+width_randombox*6, random_PCD_LF)
-random_boxes("PC_PD_RO",length_randombox,width_randombox, 29 + width_box*5+width_randombox*7, random_PCD_RO)
+# random_boxes("PA_PB_RH",length_randombox,width_randombox, 17 + width_box*5+width_randombox*1, random_PAB_RH)
+# random_boxes("PA_PB_LF",length_randombox,width_randombox, 19 + width_box*5+width_randombox*2, random_PAB_LF)
+# random_boxes("PA_PB_RO",length_randombox,width_randombox, 21 + width_box*5+width_randombox*3, random_PAB_RO)
+# random_boxes("PC_PD_BS",length_randombox,width_randombox, 23 + width_box*5+width_randombox*4, random_PCD_BS)
+# random_boxes("PC_PD_RH",length_randombox,width_randombox, 25 + width_box*5+width_randombox*5, random_PCD_RH)
+# random_boxes("PC_PD_LF",length_randombox,width_randombox, 27 + width_box*5+width_randombox*6, random_PCD_LF)
+# random_boxes("PC_PD_RO",length_randombox,width_randombox, 29 + width_box*5+width_randombox*7, random_PCD_RO)
+for i in sample_coordinate_random:
+    print("Key : " +i +"| Value : " +sample_coordinate_random[i])
 
 workbook.close()
 

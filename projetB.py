@@ -31,15 +31,15 @@ random_PCD_RH = []
 random_PCD_LF = []
 random_PCD_RO = []
 
-sample_coordinate_box = {}
-sample_coordinate_random = {}
+chess_mapper = {1:"A",2:"B", 3: "C", 4: "D", 5:"E", 6:"F",7:"G",8:"H",9:"I",10:"J",11:"K",12:"L",13:"M", 14:"N", 15:"O", 16:"P",17:"Q",18:"R",19:"S",20:"T",21:"U",22:"V",23:"W",24:"X",25:"Y",26:"Z"}
 
-sample_coordinate_box.update({"Echantillons":"Coordonnée"})
-sample_coordinate_random.update({"Echantillons":"Coordonnée"})
+random_chess_coordinate= []
 
 tab1 = ["PA","PB","PC","PD"]
 tab1bis = ["PA","PB","PC","PD","Culturomique","Culturomique"]
 tab2 = ["BS","RH","LF","RO"]
+
+#-------------------------------------------------- Functions
 
 # Find the longest word in a list
 # Param => list : List
@@ -93,9 +93,10 @@ def box(length,width,global_col,global_row,list,index,box_number):
 def random_box(title, length, width, global_col, global_row, list, index, box_number):
     worksheet.set_column(global_col, global_col+width-1, find_longest_word(list))
     worksheet.merge_range(global_row-1,global_col,global_row-1, global_col+width-1, 'Merged Range')
-    worksheet.write(global_row-1,global_col,"Plaque "+title + " " +str(box_number), title_cell)
+    worksheet.write(global_row-1,global_col,"Plaque "+ title + " " +str(box_number), title_cell)
     
     tab_coor = tab_2D_coordinate(length,width)
+    chess_coordinate = {title : box_number};
     
     if len(list) < len(tab_coor):
         shortest_list = len(list)
@@ -106,21 +107,23 @@ def random_box(title, length, width, global_col, global_row, list, index, box_nu
         if index >= len(list):
             break
         coor = random_coor(tab_coor)
-        # print("Coor 0 : " + str(coor[0]+global_row))
-        # print("Coor 1 : " + str(coor[1]+global_col))
-        # print("Sample : " + list[index] +  "chess coor : "+ xl_rowcol_to_cell(coor[0]+global_row,coor[1]+global_col))
 
-        # Add to dict the coordinate translate to chess coordinate
-        sample_coordinate_random.update({list[index]: xl_rowcol_to_cell(coor[0]+global_row,coor[1]+global_col)})
+        coor0 = str(chess_mapper[coor[0]+1])
+        coor1 = str(coor[1]+1)
+
+        # print(str(coor[0]) + str(coor[1])+ " -> " + coor0 + coor1 )
+        chess_coordinate.update( { list[index]:coor0+coor1 } )
+
         worksheet.write(coor[0]+global_row, coor[1]+global_col, list[index])
         index=index+1
 
-    yellow_cell = workbook.add_format()
-    yellow_cell.set_bg_color('yellow')
+    
     dead_columns = ["Truc : "]
+
     for row in range(length):
         worksheet.write(global_row+row,width+global_col, dead_columns[0]+str(row),yellow_cell)
 
+    random_chess_coordinate.append(chess_coordinate)
     return index
     
 # Generate a 2D table containing is own index as element
@@ -130,7 +133,7 @@ def tab_2D_coordinate(x,y):
         for j in range(y):
             res.append([i,j])
     return res
-    
+
 # Will use box function until there are enought element in the list
 # Param => length : length of the box
 # Param => width : width of the box
@@ -197,9 +200,13 @@ def list_generator():
             sacs.append(line +'-' + y)
 
         for y in tab1:
+
             pilluliers.append(line + '-' + y)
+
             for z in tab2: 
+
                 tubes.append(line + '-' + y + '-' + z)
+                
                 if z == "BS":
                     boite_BS.append(line + '-' + y + '-' + z)
                 if z == "RH":
@@ -230,19 +237,6 @@ def list_generator():
                         random_PCD_LF.append(line + '-' + y + '-' + z)
                     if z == "RO":
                         random_PCD_RO.append(line + '-' + y + '-' + z)
-                
-
-
-
-# Main
-workbook = xlsxwriter.Workbook('projetB.xlsx')
-worksheet = workbook.add_worksheet()
-
-
-title_cell = workbook.add_format()
-title_cell.set_bg_color('green')
-title_cell.set_font_size(18)
-title_cell.set_align('center')
 
 
 def non_negative_input(output):
@@ -278,15 +272,56 @@ def non_empty_string_input(output):
             break
     return value
 
-# Main
+
+def make_coordinate_file():
+    
+    worksheet2 = workbook.add_worksheet("Coordonnées")
+
+    
+
+    title_cell = workbook.add_format()
+    title_cell.set_bg_color('green')
+    title_cell.set_font_size(18)
+    title_cell.set_align('center')
+
+    empty_cell = workbook.add_format()
+    empty_cell.set_bg_color('gray')
+
+    rows = 0    
+    for tab in range(len(random_chess_coordinate)):
+        first_line = 0
+        worksheet2.set_column(first_line, 0, find_longest_word(random_chess_coordinate[tab]))
+        
+        for elem in random_chess_coordinate[tab]:
+
+            if first_line == 0:
+                worksheet2.write(rows, 0, elem,title_cell)
+                worksheet2.write(rows, 1, str(random_chess_coordinate[tab][elem]),title_cell)
+            else :
+                worksheet2.write(rows, 0, elem)
+                worksheet2.write(rows, 1, str(random_chess_coordinate[tab][elem]))
+
+            first_line = first_line + 1
+            rows = rows + 1
+            
+        ## Plaques separator
+        worksheet2.write(rows, 0, "",empty_cell)
+        worksheet2.write(rows, 1, "",empty_cell)
+        rows = rows + 1
+
+#------------------------------------------------------------- Main
+
 workbook = xlsxwriter.Workbook('projetB.xlsx')
-worksheet = workbook.add_worksheet()
+worksheet = workbook.add_worksheet("Tableau")
 
 
 title_cell = workbook.add_format()
 title_cell.set_bg_color('green')
 title_cell.set_font_size(18)
 title_cell.set_align('center')
+
+yellow_cell = workbook.add_format()
+yellow_cell.set_bg_color('yellow')
 
 
 # print("Pour quitter l'opération en cours, faite CTRL+C.")
@@ -310,7 +345,7 @@ season = "Sp"
 length_box= 6
 width_box= 6
 length_randombox= 5
-width_randombox= 5
+width_randombox= 6
 
 
 
@@ -349,7 +384,7 @@ list_generator()
 #Random Box
 
 # print("Nombre de tube = " + str(len(random_PAB_BS)))
-random_boxes("PA_PB_BS",length_randombox,width_randombox, 15 + width_box*5+width_randombox*0, random_PAB_BS)
+# random_boxes("PA_PB_BS",length_randombox,width_randombox, 15 + width_box*5+width_randombox*0, random_PAB_BS)
 # random_boxes("PA_PB_RH",length_randombox,width_randombox, 17 + width_box*5+width_randombox*1, random_PAB_RH)
 # random_boxes("PA_PB_LF",length_randombox,width_randombox, 19 + width_box*5+width_randombox*2, random_PAB_LF)
 # random_boxes("PA_PB_RO",length_randombox,width_randombox, 21 + width_box*5+width_randombox*3, random_PAB_RO)
@@ -357,11 +392,12 @@ random_boxes("PA_PB_BS",length_randombox,width_randombox, 15 + width_box*5+width
 # random_boxes("PC_PD_RH",length_randombox,width_randombox, 25 + width_box*5+width_randombox*5, random_PCD_RH)
 # random_boxes("PC_PD_LF",length_randombox,width_randombox, 27 + width_box*5+width_randombox*6, random_PCD_LF)
 # random_boxes("PC_PD_RO",length_randombox,width_randombox, 29 + width_box*5+width_randombox*7, random_PCD_RO)
-for i in sample_coordinate_random:
-    print("Key : " +i +"| Value : " +sample_coordinate_random[i])
 
+random_boxes("PA_PB_BS",length_randombox,width_randombox, 4, random_PAB_BS)
+random_boxes("PA_PB_BH",length_randombox,width_randombox, 4 +width_randombox+2, random_PAB_RH)
+
+make_coordinate_file()
 workbook.close()
-
 print(datetime.datetime.now() - begin_time)
 print("minute:second:microsecond")
 print("Nombre de tube = " + str(len(tubes)))
